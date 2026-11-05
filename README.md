@@ -15,7 +15,7 @@
 [![GitHub stars](https://img.shields.io/github/stars/aa1143/NamiCordis?style=social)](https://github.com/aa1143/NamiCordis/stargazers)
 [![X](https://img.shields.io/badge/@antiAIvo-000000?logo=x&logoColor=white)](https://x.com/antiAIvo)
 
-[拆机 DeepSeek Harness](https://namiai.tech/teardown/deepseek-harness/) · [快速开始](#快速开始) · [和 DSH 的对应关系](#和-dsh-的对应关系) · [作者 𝕏](https://x.com/antiAIvo)
+[一张图看懂 DSH（可视化）](https://namiai.tech/dsh/) · [配套文章](#配套文章) · [快速开始](#快速开始) · [和 DSH 的对应关系](#和-dsh-的对应关系) · [作者 𝕏](https://x.com/antiAIvo)
 
 <img src="assets/demo.gif" alt="一张图看懂 DeepSeek Harness：一次提问「现在几点？」在插件之间怎么流转。左边架构图高亮当前模块，右边同步显示对应的代码行" width="100%">
 
@@ -63,6 +63,20 @@ app.plugin(apiKey ? deepseek : mock, { apiKey })  // 模型适配器，随时可
 app.plugin(webserver, { port, staticDir })        // 入口
 ```
 
+## 配套文章
+
+架构图上的每一块，都有一篇文章展开讲。可以在网站上读（带可视化），也可以直接读 `docs/` 里的 Markdown。
+
+| 篇 | 文章 | 对应代码 |
+|---|---|---|
+| 01 | [一切皆插件：DeepSeek Harness 最核心的设计](docs/01-plugin-everything.md) · [网页版](https://namiai.tech/dsh/plugin-everything/) | 全貌 |
+| 02 | [插件与 Context：插件拿到的到底是什么](docs/02-context.md) · [网页版](https://namiai.tech/dsh/context/) | `context.ts`、`registry.ts` |
+| 03 | [Fiber：一个插件的一生](docs/03-fiber.md) · [网页版](https://namiai.tech/dsh/fiber/) | `fiber.ts` |
+| 04 | [服务与依赖注入：ctx.llm 是怎么来的](docs/04-service.md) · [网页版](https://namiai.tech/dsh/service/) | `reflect.ts`、`service.ts` |
+| 05 | [事件总线：插件之间怎么说话](docs/05-events.md) · [网页版](https://namiai.tech/dsh/events/) | `events.ts` |
+| 06 | [用插件搭一个 Agent：一次提问的完整旅程](docs/06-agent.md) · [网页版](https://namiai.tech/dsh/agent/) | `packages/*` |
+| 07 | [和真 Cordis 逐行对照：迷你版省了什么](docs/07-compare.md) · [网页版](https://namiai.tech/dsh/compare/) | `tests/compat.ts` |
+
 ## 快速开始
 
 需要 Node.js 22.18 以上（直接运行 TypeScript，不用编译）。
@@ -108,6 +122,7 @@ packages/
   webserver/       网页服务 + 流式聊天接口
 apps/web/          网页端入口 + 聊天页面
 tests/             兼容性测试 + Agent 测试
+docs/              配套文章（7 篇）
 ```
 
 ## 和 DSH 的对应关系
