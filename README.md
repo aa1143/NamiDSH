@@ -1,16 +1,63 @@
+<div align="center">
+
+<img src="assets/logo.png" alt="NamiCordis logo" width="120">
+
 # NamiCordis
 
-**对照 DeepSeek Harness 的迷你学习项目。**
+**对照 DeepSeek Harness 的迷你学习项目**<br>
+一千来行 TypeScript，看懂 DSH 的插件架构：迷你版 Cordis + 迷你版 DSH + 网页端 Agent
 
-DeepSeek Harness（DSH）有一百多万行代码，直接读源码很吃力。但它的骨架其实很清楚：最底下是 Cordis 插件框架，模型、工具、会话、提示词，连 Agent 循环本身，都是插在上面的插件。
+[![test](https://github.com/aa1143/NamiCordis/actions/workflows/test.yml/badge.svg)](https://github.com/aa1143/NamiCordis/actions/workflows/test.yml)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-22.18+-5FA04E?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+[![Code License](https://img.shields.io/badge/Code-MIT-green)](LICENSE)
+[![拆机](https://img.shields.io/badge/%E6%8B%86%E6%9C%BA%20DeepSeek%20Harness-namiai.tech-FFD84D)](https://namiai.tech/teardown/deepseek-harness/)
+[![GitHub stars](https://img.shields.io/github/stars/aa1143/NamiCordis?style=social)](https://github.com/aa1143/NamiCordis/stargazers)
+[![X](https://img.shields.io/badge/@antiAIvo-000000?logo=x&logoColor=white)](https://x.com/antiAIvo)
+
+[拆机 DeepSeek Harness](https://namiai.tech/teardown/deepseek-harness/) · [快速开始](#快速开始) · [和 DSH 的对应关系](#和-dsh-的对应关系) · [作者 𝕏](https://x.com/antiAIvo)
+
+</div>
+
+DeepSeek Harness（DSH）有一百多万行代码，直接读源码很吃力。但它的骨架其实很清楚：最底下是一块叫 Cordis 的插件「主板」，模型、工具、会话、提示词，连 Agent 循环本身，都是插在上面的卡。
 
 这个项目把这套骨架按原样缩小了一遍：
 
-- **迷你版 Cordis**：约 680 行 TypeScript，文件结构、API 和真 Cordis 一一对应，DSH 用到的核心功能全部保留
-- **迷你版 DSH**：11 个包，名字和职责都对应 DSH 的同名包，同样是 `class Xxx extends Service` + `static inject` 的写法
-- **网页端 Agent**：输入问题，流式返回回答，可以接 DeepSeek，也可以离线运行
+- **迷你版 Cordis**：约 680 行，文件结构、API、插件写法和真 Cordis 一一对应，DSH 用到的核心功能全部保留：依赖注入、异步加载、错误隔离、热插拔、五种事件
+- **和真 Cordis 行为一致**：[14 个测试场景](tests/compat.ts)分别跑在迷你版和 DSH 里的真 Cordis 上，输出逐行一致
+- **迷你版 DSH**：11 个包，名字和职责对应 DSH 的同名包，同样是 `class Xxx extends Service` + `static inject` 的写法
+- **网页端 Agent**：`npm start` 打开浏览器就能对话，可以接 DeepSeek，没有 API Key 也能离线跑
+- **零运行时依赖**：Node.js 22.18 起直接运行 TypeScript，不用编译，也不用装任何框架
 
 读完这个项目，再去读 DSH 的源码，你会发现每个文件都能找到对应。
+
+> 先学 [NamiGPT](https://github.com/aa1143/NamiGPT) 搞懂模型本身，再学 [NamiAgent](https://github.com/aa1143/NamiAgent) 搞懂模型外面那一圈，最后用 NamiCordis 看懂工业级 Agent 是怎么搭起来的。
+
+## 一棵插件树
+
+整个 Agent 就是挂在根 `Context` 上的一棵插件树。每个插件声明自己依赖哪些服务（`inject`），依赖没到齐就等着，到齐了自动启动；依赖消失了自动停止，换上新的再自动恢复。
+
+```mermaid
+flowchart LR
+  root(["Context 根"]) --> spine["agent-spine<br/>核心套件"]
+  root --> adapter["llm-deepseek / llm-mock<br/><sub>inject: llm</sub>"]
+  root --> web["webserver<br/><sub>inject: agentLoop, sessions</sub>"]
+  spine --> llm["llm<br/><sub>提供 ctx.llm</sub>"]
+  spine --> sessions["session<br/><sub>提供 ctx.sessions</sub>"]
+  spine --> tools["tools<br/><sub>提供 ctx.tools</sub>"]
+  spine --> prompt["system-prompt<br/><sub>提供 ctx.systemPrompt</sub>"]
+  spine --> toolx["tool-fs / tool-time<br/><sub>inject: tools</sub>"]
+  spine --> loop["agent-loop<br/><sub>inject: llm, tools, sessions, systemPrompt</sub>"]
+```
+
+入口只有几行（[`apps/web/src/main.ts`](apps/web/src/main.ts)）：
+
+```ts
+const app = new Context()
+app.plugin(spine, { workspace })                  // 核心套件
+app.plugin(apiKey ? deepseek : mock, { apiKey })  // 模型适配器，随时可换
+app.plugin(webserver, { port, staticDir })        // 入口
+```
 
 ## 快速开始
 
@@ -59,15 +106,6 @@ apps/web/          网页端入口 + 聊天页面
 tests/             兼容性测试 + Agent 测试
 ```
 
-整个 Agent 就是一棵插件树，入口只有几行（`apps/web/src/main.ts`）：
-
-```ts
-const app = new Context()
-app.plugin(spine, { workspace })                  // 核心套件
-app.plugin(apiKey ? deepseek : mock, { apiKey })  // 模型适配器，随时可换
-app.plugin(webserver, { port, staticDir })        // 入口
-```
-
 ## 和 DSH 的对应关系
 
 ### 框架：packages/cordis ↔ vendor/cordis
@@ -106,9 +144,9 @@ DSH 的分层原则在这里同样成立：**服务定义**（llm、tools）、*
 
 ## 相关项目
 
-- 网站：[namiai.tech](https://namiai.tech)
-- [NamiGPT](https://github.com/aa1143/NamiGPT)：从零手写大模型
-- [NamiAgent](https://github.com/aa1143/NamiAgent)：从零手写 Agent
+- [NamiGPT](https://github.com/aa1143/NamiGPT)：零基础入门大模型，从零手写 GPT-2
+- [NamiAgent](https://github.com/aa1143/NamiAgent)：零基础入门 AI Agent，从零手写 Agent
+- [拆机 DeepSeek Harness](https://namiai.tech/teardown/deepseek-harness/)：配套图文，一个部件一个部件拆开 DSH
 
 ## License
 
