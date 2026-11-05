@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NamiCordis Agent</title>
+<style>
+  :root { --bg: #fafaf8; --fg: #1d1d1f; --muted: #8a8a8e; --line: #e5e5e2; --card: #fff; --accent: #1d1d1f; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #161617; --fg: #ececec; --muted: #8e8e93; --line: #2c2c2e; --card: #1f1f21; --accent: #ececec; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.7 -apple-system, "PingFang SC", "Noto Sans SC", sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 16px 160px; }
+  header { margin-bottom: 24px; }
+  h1 { font-size: 20px; margin: 0; letter-spacing: .5px; }
+  header p { margin: 4px 0 0; color: var(--muted); font-size: 14px; }
+  .msg { margin: 20px 0; white-space: pre-wrap; word-break: break-word; }
+  .user { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; margin-left: 15%; }
+  .status { color: var(--muted); font-size: 14px; }
+  form { position: fixed; left: 0; right: 0; bottom: 0; background: linear-gradient(transparent, var(--bg) 30%); padding: 24px 16px 20px; }
+  .box { max-width: 760px; margin: 0 auto; display: flex; gap: 8px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 8px; }
+  textarea { flex: 1; border: 0; outline: 0; resize: none; background: transparent; color: inherit; font: inherit; padding: 6px 8px; max-height: 200px; }
+  button { border: 0; border-radius: 10px; padding: 0 18px; background: var(--accent); color: var(--bg); font: inherit; cursor: pointer; }
+  button:disabled { opacity: .4; cursor: default; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>NamiCordis Agent</h1>
+    <p>迷你版 Cordis + 迷你版 DeepSeek Harness</p>
+  </header>
+  <div id="list"></div>
+</main>
+<form id="form">
+  <div class="box">
+    <textarea id="input" rows="1" placeholder="输入问题，Enter 发送，Shift+Enter 换行" autofocus></textarea>
+    <button id="send">发送</button>
+  </div>
+</form>
+<script>
+  const list = document.getElementById('list')
+  const input = document.getElementById('input')
+  const send = document.getElementById('send')
+  let sessionId = null
+
+  function add(cls, text) {
+    const div = document.createElement('div')
+    div.className = 'msg ' + cls
+    div.textContent = text
+    list.appendChild(div)
+    window.scrollTo(0, document.body.scrollHeight)
+    return div
+  }
+
+  async function ask(message) {
+    add('user', message)
+    const reply = add('status', '思考中…')
+    let text = ''
+    send.disabled = true
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId, message }),
+      })
+      // 读 SSE：每段是 "event: xxx\ndata: {...}\n\n"
+      const reader = res.body.pipeThrough(new TextDecoderStream()).getReader()
+      let buffer = ''
+      while (true) {
+        const { value, done } = await reader.read()
+        if (done) break
+        buffer += value
+        const parts = buffer.split('\n\n')
+        buffer = parts.pop()
+        for (const part of parts) {
+          const event = part.match(/^event: (.*)$/m)?.[1]
+          const data = JSON.parse(part.match(/^data: (.*)$/m)?.[1] ?? '{}')
+          if (event === 'session') sessionId = data.id
+          if (event === 'tool' && !text) reply.textContent = '正在查询…'
+          if (event === 'delta') {
+            text += data.text
+            reply.className = 'msg'
+            reply.textContent = text
+          }
+          if (event === 'error') { reply.className = 'msg status'; reply.textContent = '出错了：' + data.message }
+        }
+        window.scrollTo(0, document.body.scrollHeight)
+      }
+    } catch (e) {
+      reply.className = 'msg status'
+      reply.textContent = '连接失败：' + e.message
+    }
+    send.disabled = false
+    input.focus()
+  }
+
+  document.getElementById('form').addEventListener('submit', (e) => {
+    e.preventDefault()
+    const message = input.value.trim()
+    if (!message || send.disabled) return
+    input.value = ''
+    input.style.height = ''
+    ask(message)
+  })
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) {
+      e.preventDefault()
+      document.getElementById('form').requestSubmit()
+    }
+  })
+  input.addEventListener('input', () => {
+    input.style.height = ''
+    input.style.height = input.scrollHeight + 'px'
+  })
+</script>
+</body>
+</html>

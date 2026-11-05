@@ -1,0 +1,7 @@
+{
+  "name": "@nami/dsh-tools",
+  "version": "0.1.0",
+  "description": "工具表 + 执行管线 ctx.tools（对应 @deepseek-ai/dsh-tools）",
+  "type": "module",
+  "exports": "./src/index.ts"
+}

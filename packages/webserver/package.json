@@ -1,0 +1,7 @@
+{
+  "name": "@nami/dsh-webserver",
+  "version": "0.1.0",
+  "description": "HTTP 服务 + 流式聊天接口（对应 @deepseek-ai/dsh-webserver）",
+  "type": "module",
+  "exports": "./src/index.ts"
+}

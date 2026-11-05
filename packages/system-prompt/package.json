@@ -1,0 +1,7 @@
+{
+  "name": "@nami/dsh-system-prompt",
+  "version": "0.1.0",
+  "description": "系统提示词组装 ctx.systemPrompt（对应 @deepseek-ai/dsh-system-prompt）",
+  "type": "module",
+  "exports": "./src/index.ts"
+}

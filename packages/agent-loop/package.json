@@ -1,0 +1,7 @@
+{
+  "name": "@nami/dsh-agent-loop",
+  "version": "0.1.0",
+  "description": "Agent 循环 ctx.agentLoop（对应 @deepseek-ai/dsh-agent-loop）",
+  "type": "module",
+  "exports": "./src/index.ts"
+}

@@ -1,0 +1,7 @@
+{
+  "name": "@nami/dsh-session",
+  "version": "0.1.0",
+  "description": "会话日志 ctx.sessions（对应 @deepseek-ai/dsh-session）",
+  "type": "module",
+  "exports": "./src/index.ts"
+}

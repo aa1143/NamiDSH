@@ -1,0 +1,7 @@
+{
+  "name": "@nami/dsh-tool-fs",
+  "version": "0.1.0",
+  "description": "只读文件工具 read_file / list_dir（对应 @deepseek-ai/dsh-tool-fs）",
+  "type": "module",
+  "exports": "./src/index.ts"
+}

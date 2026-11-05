@@ -1,0 +1,7 @@
+{
+  "name": "@nami/dsh-agent-spine",
+  "version": "0.1.0",
+  "description": "把核心服务组装成一个套件插件（对应 @deepseek-ai/dsh-agent-spine-demo）",
+  "type": "module",
+  "exports": "./src/index.ts"
+}

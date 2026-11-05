@@ -1,0 +1,7 @@
+{
+  "name": "@nami/dsh-web",
+  "version": "0.1.0",
+  "description": "网页端 Agent 入口（对应 DSH 的 apps/web）",
+  "private": true,
+  "type": "module"
+}

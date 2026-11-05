@@ -1,0 +1,24 @@
+{
+  "name": "nami-cordis",
+  "version": "0.1.0",
+  "description": "对照 DeepSeek Harness 的迷你学习项目：迷你版 Cordis 插件框架 + 迷你版 DSH Agent + 网页端",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "start": "node apps/web/src/main.ts",
+    "test": "node tests/compat.ts && node tests/agent.ts",
+    "check": "tsc"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "typescript": "^5.8.0"
+  },
+  "license": "MIT"
+}

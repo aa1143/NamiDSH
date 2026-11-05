@@ -1,0 +1,7 @@
+{
+  "name": "@nami/dsh-tool-time",
+  "version": "0.1.0",
+  "description": "当前时间工具 get_time",
+  "type": "module",
+  "exports": "./src/index.ts"
+}

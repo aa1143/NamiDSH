@@ -1,0 +1,7 @@
+{
+  "name": "@nami/dsh-llm",
+  "version": "0.1.0",
+  "description": "抽象 LLM 服务 ctx.llm（对应 @deepseek-ai/dsh-llm）",
+  "type": "module",
+  "exports": "./src/index.ts"
+}

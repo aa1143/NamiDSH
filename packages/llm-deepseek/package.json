@@ -1,0 +1,7 @@
+{
+  "name": "@nami/dsh-llm-deepseek",
+  "version": "0.1.0",
+  "description": "DeepSeek 接入（对应 @deepseek-ai/dsh-llm-deepseek）",
+  "type": "module",
+  "exports": "./src/index.ts"
+}

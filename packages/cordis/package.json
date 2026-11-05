@@ -1,0 +1,7 @@
+{
+  "name": "@nami/cordis",
+  "version": "0.1.0",
+  "description": "迷你版 Cordis 插件框架（对应 @deepseek-ai/cordis）",
+  "type": "module",
+  "exports": "./src/index.ts"
+}
