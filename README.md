@@ -37,32 +37,6 @@ DeepSeek Harness（DSH）有一百多万行代码，直接读源码很吃力。�
 
 > 先学 [NamiGPT](https://github.com/aa1143/NamiGPT) 搞懂模型本身，再学 [NamiAgent](https://github.com/aa1143/NamiAgent) 搞懂模型外面那一圈，最后用 NamiCordis 看懂工业级 Agent 是怎么搭起来的。
 
-## 一棵插件树
-
-整个 Agent 就是挂在根 `Context` 上的一棵插件树。每个插件声明自己依赖哪些服务（`inject`），依赖没到齐就等着，到齐了自动启动；依赖消失了自动停止，换上新的再自动恢复。
-
-```mermaid
-flowchart LR
-  root(["Context 根"]) --> spine["agent-spine<br/>核心套件"]
-  root --> adapter["llm-deepseek / llm-mock<br/><sub>inject: llm</sub>"]
-  root --> web["webserver<br/><sub>inject: agentLoop, sessions</sub>"]
-  spine --> llm["llm<br/><sub>提供 ctx.llm</sub>"]
-  spine --> sessions["session<br/><sub>提供 ctx.sessions</sub>"]
-  spine --> tools["tools<br/><sub>提供 ctx.tools</sub>"]
-  spine --> prompt["system-prompt<br/><sub>提供 ctx.systemPrompt</sub>"]
-  spine --> toolx["tool-fs / tool-time<br/><sub>inject: tools</sub>"]
-  spine --> loop["agent-loop<br/><sub>inject: llm, tools, sessions, systemPrompt</sub>"]
-```
-
-入口只有几行（[`apps/web/src/main.ts`](apps/web/src/main.ts)）：
-
-```ts
-const app = new Context()
-app.plugin(spine, { workspace })                  // 核心套件
-app.plugin(apiKey ? deepseek : mock, { apiKey })  // 模型适配器，随时可换
-app.plugin(webserver, { port, staticDir })        // 入口
-```
-
 ## 配套文章
 
 架构图上的每一块，都有一篇文章展开讲。可以在网站上读（带可视化），也可以直接读 `docs/` 里的 Markdown。
@@ -76,6 +50,23 @@ app.plugin(webserver, { port, staticDir })        // 入口
 | 05 | [事件总线：插件之间怎么说话](docs/05-events.md) · [网页版](https://namiai.tech/dsh/events/) | `events.ts` |
 | 06 | [用插件搭一个 Agent：一次提问的完整旅程](docs/06-agent.md) · [网页版](https://namiai.tech/dsh/agent/) | `packages/*` |
 | 07 | [和真 Cordis 逐行对照：迷你版省了什么](docs/07-compare.md) · [网页版](https://namiai.tech/dsh/compare/) | `tests/compat.ts` |
+
+## 一棵插件树
+
+整个 Agent 就是挂在根 `Context` 上的一棵插件树。每个插件声明自己依赖哪些服务（`inject`），依赖没到齐就等着，到齐了自动启动；依赖消失了自动停止，换上新的再自动恢复。
+
+<p align="center"><img src="assets/architecture.png" alt="NamiCordis 架构图：上层是对应 DSH packages/* 的插件，下层是对应 DSH Cordis 的框架" width="600"></p>
+
+想看每一块的代码、一步一步看一次提问怎么流转，打开[可交互版本](https://namiai.tech/dsh/)。
+
+入口只有几行（[`apps/web/src/main.ts`](apps/web/src/main.ts)）：
+
+```ts
+const app = new Context()
+app.plugin(spine, { workspace })                  // 核心套件
+app.plugin(apiKey ? deepseek : mock, { apiKey })  // 模型适配器，随时可换
+app.plugin(webserver, { port, staticDir })        // 入口
+```
 
 ## 快速开始
 
