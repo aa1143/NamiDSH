@@ -2,7 +2,7 @@
 
 > 上一篇说，每挂载一次插件，框架就创建一个 Fiber。这一篇跟着一个 Fiber 走完它的一生：它会处于哪几种状态，什么时候启动、什么时候停下，出错了怎么办，卸载时又是怎么清理干净的。
 >
-> 对应 NamiCordis 的 `packages/cordis/src/fiber.ts`（329 行），对应 DSH 的 `vendor/cordis/src/fiber.ts`（754 行），是整个框架最核心的文件。
+> 对应 NamiDSH 的 `packages/cordis/src/fiber.ts`（329 行），对应 DSH 的 `vendor/cordis/src/fiber.ts`（754 行），是整个框架最核心的文件。
 
 ## 01 六种状态
 

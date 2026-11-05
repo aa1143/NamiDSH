@@ -2,7 +2,7 @@
 
 > 上一篇讲服务：一个插件提供能力，另一个插件声明依赖、拿来就用。但插件之间还有另一种联系：我不知道谁会关心这件事，但我把它广播出去。这就是事件。
 >
-> DeepSeek Harness 里，工具执行前的审批、模型请求的重试、会话的持久化，都是靠事件挂上去的。对应 NamiCordis 的 `packages/cordis/src/events.ts`。
+> DeepSeek Harness 里，工具执行前的审批、模型请求的重试、会话的持久化，都是靠事件挂上去的。对应 NamiDSH 的 `packages/cordis/src/events.ts`。
 
 ## 01 on 和 emit
 

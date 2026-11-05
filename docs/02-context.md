@@ -2,7 +2,7 @@
 
 > 上一篇说，DeepSeek Harness 里一切都是插件。这一篇从最底层开始：一个插件长什么样，`ctx.plugin()` 那一瞬间发生了什么，插件拿到的 `ctx` 又是什么。
 >
-> 对应 NamiCordis 的 `packages/cordis/src/context.ts` 和 `registry.ts`，对应 DSH 的 `vendor/cordis/src` 里的同名文件。
+> 对应 NamiDSH 的 `packages/cordis/src/context.ts` 和 `registry.ts`，对应 DSH 的 `vendor/cordis/src` 里的同名文件。
 
 ## 01 插件的三种写法
 

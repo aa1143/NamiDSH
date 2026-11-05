@@ -134,4 +134,4 @@ DeepSeek Harness 一百多万行代码，真正撑起整个系统的，是 Cordi
 
 这五条规则，用 680 行就能写出来，跑出来的行为和真 Cordis 一样。剩下的，都是在把这五条规则做得更稳。
 
-代码在 [GitHub · NamiCordis](https://github.com/aa1143/NamiCordis)，可视化在[一张图看懂 DeepSeek Harness](https://namiai.tech/dsh/)。欢迎 clone 下来，把测试跑一遍，再去读 DSH 的源码。
+代码在 [GitHub · NamiDSH](https://github.com/aa1143/NamiDSH)，可视化在[一张图看懂 DeepSeek Harness](https://namiai.tech/dsh/)。欢迎 clone 下来，把测试跑一遍，再去读 DSH 的源码。

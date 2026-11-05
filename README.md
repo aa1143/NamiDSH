@@ -1,18 +1,18 @@
 <div align="center">
 
-<img src="assets/logo.png" alt="NamiCordis logo" width="120">
+<img src="assets/logo.png" alt="NamiDSH logo" width="120">
 
-# NamiCordis
+# NamiDSH
 
-**对照 DeepSeek Harness 的迷你学习项目**<br>
-一千来行 TypeScript，看懂 DSH 的插件架构：迷你版 Cordis + 迷你版 DSH + 网页端 Agent
+**迷你版 DeepSeek Harness**<br>
+一千来行 TypeScript，看懂 DSH「一切皆插件」的架构：迷你版 Cordis + 迷你版 DSH + 网页端 Agent
 
-[![test](https://github.com/aa1143/NamiCordis/actions/workflows/test.yml/badge.svg)](https://github.com/aa1143/NamiCordis/actions/workflows/test.yml)
+[![test](https://github.com/aa1143/NamiDSH/actions/workflows/test.yml/badge.svg)](https://github.com/aa1143/NamiDSH/actions/workflows/test.yml)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-22.18+-5FA04E?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
 [![Code License](https://img.shields.io/badge/Code-MIT-green)](LICENSE)
 [![拆机](https://img.shields.io/badge/%E6%8B%86%E6%9C%BA%20DeepSeek%20Harness-namiai.tech-FFD84D)](https://namiai.tech/teardown/deepseek-harness/)
-[![GitHub stars](https://img.shields.io/github/stars/aa1143/NamiCordis?style=social)](https://github.com/aa1143/NamiCordis/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/aa1143/NamiDSH?style=social)](https://github.com/aa1143/NamiDSH/stargazers)
 [![X](https://img.shields.io/badge/@antiAIvo-000000?logo=x&logoColor=white)](https://x.com/antiAIvo)
 
 [一张图看懂 DSH（可视化）](https://namiai.tech/dsh/) · [配套文章](#配套文章) · [快速开始](#快速开始) · [和 DSH 的对应关系](#和-dsh-的对应关系) · [作者 𝕏](https://x.com/antiAIvo)
@@ -35,7 +35,7 @@ DeepSeek Harness（DSH）有一百多万行代码，直接读源码很吃力。�
 
 读完这个项目，再去读 DSH 的源码，你会发现每个文件都能找到对应。
 
-> 先学 [NamiGPT](https://github.com/aa1143/NamiGPT) 搞懂模型本身，再学 [NamiAgent](https://github.com/aa1143/NamiAgent) 搞懂模型外面那一圈，最后用 NamiCordis 看懂工业级 Agent 是怎么搭起来的。
+> 先学 [NamiGPT](https://github.com/aa1143/NamiGPT) 搞懂模型本身，再学 [NamiAgent](https://github.com/aa1143/NamiAgent) 搞懂模型外面那一圈，最后用 NamiDSH 看懂工业级 Agent 是怎么搭起来的。
 
 ## 配套文章
 
@@ -55,7 +55,7 @@ DeepSeek Harness（DSH）有一百多万行代码，直接读源码很吃力。�
 
 整个 Agent 就是挂在根 `Context` 上的一棵插件树。每个插件声明自己依赖哪些服务（`inject`），依赖没到齐就等着，到齐了自动启动；依赖消失了自动停止，换上新的再自动恢复。
 
-<p align="center"><img src="assets/architecture.png" alt="NamiCordis 架构图：上层是对应 DSH packages/* 的插件，下层是对应 DSH Cordis 的框架" width="600"></p>
+<p align="center"><img src="assets/architecture.png" alt="NamiDSH 架构图：上层是对应 DSH packages/* 的插件，下层是对应 DSH Cordis 的框架" width="600"></p>
 
 想看每一块的代码、一步一步看一次提问怎么流转，打开[可交互版本](https://namiai.tech/dsh/)。
 

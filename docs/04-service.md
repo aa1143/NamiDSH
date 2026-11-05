@@ -2,7 +2,7 @@
 
 > DeepSeek Harness 的 Agent 循环里写着 `ctx.llm`、`ctx.tools`，却没有 import 任何模型或工具的代码。这一篇讲这背后的机制：服务怎么提供，依赖怎么声明，`ctx.llm` 这一个属性读取背后发生了什么。
 >
-> 对应 NamiCordis 的 `packages/cordis/src/reflect.ts` 和 `service.ts`，对应 DSH 的 `vendor/cordis/src` 里的同名文件。
+> 对应 NamiDSH 的 `packages/cordis/src/reflect.ts` 和 `service.ts`，对应 DSH 的 `vendor/cordis/src` 里的同名文件。
 
 ## 01 提供服务：provide
 

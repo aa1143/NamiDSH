@@ -1,5 +1,5 @@
 {
-  "name": "nami-cordis",
+  "name": "nami-dsh",
   "version": "0.1.0",
   "description": "对照 DeepSeek Harness 的迷你学习项目：迷你版 Cordis 插件框架 + 迷你版 DSH Agent + 网页端",
   "private": true,

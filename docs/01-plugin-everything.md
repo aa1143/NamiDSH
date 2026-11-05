@@ -2,7 +2,7 @@
 
 > DeepSeek Harness（DSH）有一百多万行代码，但它的骨架只有一个想法：一切皆插件。模型、工具、会话、提示词，连 Agent 循环本身，都是插在同一块「主板」上的插件。
 >
-> 这个系列用一个一千来行的迷你复刻版 NamiCordis，把这个想法从里到外拆开。这是第一篇，先看全貌。
+> 这个系列用一个一千来行的迷你复刻版 NamiDSH，把这个想法从里到外拆开。这是第一篇，先看全貌。
 
 ## 01 先看一段 DSH 的真实代码
 
@@ -47,7 +47,7 @@ DSH 仓库里一共有 519 个文件 import 了 Cordis。可以说，读懂 Cord
 
 DSH 的 Cordis 本身就有 2693 行，里面有大量工程细节：调用栈追踪、作用域隔离、可调用服务、类型体操。第一次读源码，很容易陷在这些细节里，看不清主线。
 
-所以我做了 [NamiCordis](https://github.com/aa1143/NamiCordis)，一个按原样缩小的复刻版：
+所以我做了 [NamiDSH](https://github.com/aa1143/NamiDSH)，一个按原样缩小的复刻版：
 
 - **迷你版 Cordis**：约 680 行 TypeScript。文件结构和真 Cordis 一一对应（`fiber.ts`、`reflect.ts`、`events.ts`、`registry.ts`……），API 名字也一样。
 - **迷你版 DSH**：11 个包，名字对应 DSH 的同名包：`llm`、`tools`、`session`、`system-prompt`、`agent-loop`……写法同样是 `class Xxx extends Service` 加 `static inject`。
@@ -85,8 +85,8 @@ DSH 的 Cordis 本身就有 2693 行，里面有大量工程细节：调用栈�
 所有代码都可以自己跑：
 
 ```bash
-git clone https://github.com/aa1143/NamiCordis
-cd NamiCordis
+git clone https://github.com/aa1143/NamiDSH
+cd NamiDSH
 npm install   # 只是把 packages/* 链接起来，没有运行时依赖
 npm start     # 打开 http://localhost:3000
 npm test      # 兼容性测试 + Agent 测试
