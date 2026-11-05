@@ -17,6 +17,10 @@
 
 [拆机 DeepSeek Harness](https://namiai.tech/teardown/deepseek-harness/) · [快速开始](#快速开始) · [和 DSH 的对应关系](#和-dsh-的对应关系) · [作者 𝕏](https://x.com/antiAIvo)
 
+<img src="assets/demo.gif" alt="一张图看懂 DeepSeek Harness：一次提问「现在几点？」在插件之间怎么流转。左边架构图高亮当前模块，右边同步显示对应的代码行" width="100%">
+
+<sub>一次提问「现在几点？」在插件之间怎么流转：左边是架构图，右边是这一步对应的真实代码</sub>
+
 </div>
 
 DeepSeek Harness（DSH）有一百多万行代码，直接读源码很吃力。但它的骨架其实很清楚：最底下是一块叫 Cordis 的插件「主板」，模型、工具、会话、提示词，连 Agent 循环本身，都是插在上面的卡。
